@@ -35,7 +35,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private MobvoiApiClient mMobvoiApiClient;
     private Button utrip;
     private View view;
-    private static final int MY_PERMISSIONS_REQUEST_BODY_SENSORS = 0;
+    private static final int MY_PERMISSIONS_REQUEST_BODY_SENSORS = 1;
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
@@ -56,19 +56,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 .build();
 
         checkSelfPermission(Manifest.permission.BODY_SENSORS);
-        checkAndRequestPermissions();
 
 
-        if (checkSelfPermission(Manifest.permission.BODY_SENSORS)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.BODY_SENSORS},
-                    MY_PERMISSIONS_REQUEST_BODY_SENSORS);
-
-            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-            // app-defined int constant
-
-            return;
-        }
 
 
 
@@ -98,47 +87,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     }
 
 
-    private  boolean checkAndRequestPermissions() {
-        int heart_rate_sens = ContextCompat.checkSelfPermission(this, android.Manifest.permission.BODY_SENSORS);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-
-        if (heart_rate_sens != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
-        }
-
-        if (!listPermissionsNeeded.isEmpty())
-        {
-            ActivityCompat.requestPermissions(this,listPermissionsNeeded.toArray
-                    (new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
-            return false;
-        }
-
-        return true;
-    }
-
-
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_BODY_SENSORS: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    System.out.print("Dela");
-                    // permission was granted, yay! do the
-                    // calendar task you need to do.
-
-                } else {
-                    System.out.print("Ne bo šlo!");
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'switch' lines to check for other
-            // permissions this app might request
-        }
-    }
-
 
 
 
@@ -146,8 +94,22 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
 
     public void OnClickBtn(View v){
-        checkSelfPermission(Manifest.permission.BODY_SENSORS);
-        checkAndRequestPermissions();
+       // checkSelfPermission(Manifest.permission.BODY_SENSORS);
+        if (checkSelfPermission(Manifest.permission.BODY_SENSORS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.BODY_SENSORS},
+                    MY_PERMISSIONS_REQUEST_BODY_SENSORS);
+            if (checkSelfPermission(Manifest.permission.BODY_SENSORS)
+                    != PackageManager.PERMISSION_GRANTED){
+                System.out.print(" Drugi if stavek.");
+            }
+            else{
+                System.out.print(" Drugi else.");
+            }
+        }
+        else{
+            System.out.print(" NE Deluje.");
+        }
         startMeasure();
     }
 
